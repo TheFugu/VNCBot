@@ -9,9 +9,17 @@ echo -e "\nEnding scanning !\n"
 echo -e "\nStart capture ...\n"
 IFS=$'\n'
 for ip in $(cat result.txt)
+
 do
 
-	vncsnapshot -compresslevel 0 -quality 25 -vncQuality 2 $ip capture/$ip.jpg
+	auth=`nmap -P0 --script=vnc-info.nse -p 5900 $ip | grep WARNING | awk '{print $5}'`
+
+	if [ $auth = "not" ]
+		then
+
+			vncsnapshot -compresslevel 0 -quality 25 -vncQuality 2 $ip capture/$ip.jpg
+
+		fi
 
 done
 
